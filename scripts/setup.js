@@ -25,14 +25,36 @@ function getBaseUrl(model) {
   return 'https://xingjiabiapi.org/v1';
 }
 
+// Check if it's an image generation model
+function isImageModel(model) {
+  return model.includes('image') || model.includes('imagen');
+}
+
 // Get model config
 function getModelConfig(model, apiType) {
   const base = {
     id: model,
     name: `${model} (xingjiabiapi)`,
-    reasoning: false,
-    input: ['text']
+    reasoning: false
   };
+  
+  // Image generation models
+  if (isImageModel(model)) {
+    return {
+      ...base,
+      input: ['text'],
+      output: ['image'],
+      cost: { perImage: 0 },
+      capabilities: ['image-generation'],
+      defaultParams: {
+        size: '2048x2048',
+        quality: 'standard'
+      }
+    };
+  }
+  
+  // Text models
+  base.input = ['text'];
   
   if (apiType === 'anthropic-messages') {
     return {
