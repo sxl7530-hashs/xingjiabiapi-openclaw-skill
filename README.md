@@ -71,30 +71,49 @@ node scripts/setup.js gemini-2.5-pro sk-xxx
 
 ## 图像生成参数 | Image Generation Parameters
 
-安装图像生成模型后，默认分辨率为 2048x2048。调用时可以通过 API 参数覆盖：
+安装图像生成模型后，默认分辨率为 1K。使用 OpenAI 兼容格式 + `extra_body` 参数控制分辨率和宽高比：
 
-After installing image models, default resolution is 2048x2048. Override via API params:
+After installing image models, default resolution is 1K. Use OpenAI-compatible format + `extra_body` to control resolution and aspect ratio:
 
-```javascript
-// 示例：生成 4K 图片
-const response = await fetch('https://xingjiabiapi.org/v1/images/generations', {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Bearer sk-xxx',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    model: 'gemini-3-pro-image-preview',
-    prompt: 'A beautiful sunset',
-    size: '4096x4096',  // 1024x1024 | 2048x2048 | 4096x4096
-    quality: 'hd'       // standard | hd
-  })
-});
+```bash
+curl https://xingjiabiapi.org/v1/chat/completions \
+  -H "Authorization: Bearer sk-xxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemini-3-pro-image-preview",
+    "messages": [
+      {
+        "role": "user",
+        "content": "一只穿着宇航服的猫咪在月球上散步"
+      }
+    ],
+    "extra_body": {
+      "google": {
+        "image_config": {
+          "image_size": "4K",
+          "aspectRatio": "16:9"
+        }
+      }
+    }
+  }'
 ```
 
-OpenClaw 内部调用时，参数会自动传递给底层 API。
+**分辨率选项 | Resolution Options:**
+- `1K` - 标准分辨率（默认）
+- `2K` - 高清
+- `4K` - 超高清
 
-When calling from OpenClaw, parameters are automatically passed to the underlying API.
+**宽高比选项 | Aspect Ratio Options:**
+- `1:1` - 正方形
+- `16:9` - 横屏宽幅
+- `9:16` - 竖屏（手机壁纸）
+- `3:2`, `4:3`, `21:9` 等
+
+**OpenClaw 口语化调用 | Natural Language in OpenClaw:**
+
+直接说"生成一张 4K 16:9 的日落图"，我会自动转换参数。
+
+Just say "generate a 4K 16:9 sunset image" and I'll auto-convert the parameters.
 
 ## 价格优势 | Pricing
 
