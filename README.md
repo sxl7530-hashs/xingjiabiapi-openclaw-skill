@@ -58,11 +58,43 @@ node scripts/setup.js gemini-2.5-pro sk-xxx
 - gpt-4o
 - gpt-4o-mini
 
-### Gemini
+### Gemini (文字模型 | Text Models)
 - gemini-3.1-pro-preview
 - gemini-2.5-pro
 - gemini-2.5-flash
 - gemini-2.0-flash
+
+### Gemini (图像生成 | Image Generation)
+- gemini-3-pro-image-preview
+- gemini-3.1-flash-image-preview
+- gemini-2.5-flash-image
+
+## 图像生成参数 | Image Generation Parameters
+
+安装图像生成模型后，默认分辨率为 2048x2048。调用时可以通过 API 参数覆盖：
+
+After installing image models, default resolution is 2048x2048. Override via API params:
+
+```javascript
+// 示例：生成 4K 图片
+const response = await fetch('https://xingjiabiapi.org/v1/images/generations', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer sk-xxx',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    model: 'gemini-3-pro-image-preview',
+    prompt: 'A beautiful sunset',
+    size: '4096x4096',  // 1024x1024 | 2048x2048 | 4096x4096
+    quality: 'hd'       // standard | hd
+  })
+});
+```
+
+OpenClaw 内部调用时，参数会自动传递给底层 API。
+
+When calling from OpenClaw, parameters are automatically passed to the underlying API.
 
 ## 价格优势 | Pricing
 
