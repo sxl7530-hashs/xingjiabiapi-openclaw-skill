@@ -14,8 +14,8 @@ if (!modelName || !apiKey) {
 // Auto-detect API type
 function detectApiType(model) {
   if (model.includes('claude')) return 'anthropic-messages';
-  if (model.includes('gpt')) return 'openai-chat';
-  if (model.includes('gemini')) return 'openai-chat';
+  if (model.includes('gpt')) return 'openai-responses';
+  if (model.includes('gemini')) return 'google-generative-ai';
   throw new Error(`Unknown model type: ${model}`);
 }
 
