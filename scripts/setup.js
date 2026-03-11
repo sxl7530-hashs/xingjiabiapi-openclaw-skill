@@ -116,6 +116,10 @@ const agentConfig = JSON.parse(fs.readFileSync(agentModelsJson, 'utf8'));
 agentConfig.providers = agentConfig.providers || {};
 agentConfig.providers[providerName] = provider;
 
+// Add to allowed models list
+agentConfig.models = agentConfig.models || {};
+agentConfig.models[`${providerName}/${modelName}`] = {};
+
 fs.writeFileSync(agentModelsJson, JSON.stringify(agentConfig, null, 2));
 console.log('✓ Updated agent models.json');
 
